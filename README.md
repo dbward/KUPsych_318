@@ -121,4 +121,4 @@ This is part of a series of course-specific AI study assistants built for KU onl
 
 ---
 
-*Built Spring 2024 | Updated February 2026 | University of Kansas*
+*Built February 2026 | University of Kansas*
