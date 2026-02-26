@@ -1,17 +1,17 @@
 # PSYC 318 – Cognitive Psychology Study Assistant
 **University of Kansas | Spring 2026**
 
-A Socratic tutoring chatbot for PSYC 318 (Cognitive Psychology), built to help students think through course concepts, find due dates, and get feedback on drafts without doing their work for them.
+A Socratic tutoring chatbot for PSYC 318 (Cognitive Psychology), built to help students think through course concepts, find due dates, and get feedback on drafts — without doing their work for them.
 
 ---
 
 ## What It Does
 
-- **Socratic tutoring.** Guides students to answers through questioning rather than providing direct answers
-- **Course logistics.** Answers questions about due dates, assignments, policies, and the course schedule
-- **Draft feedback.** Students can upload a draft and receive guided questions to improve their thinking
-- **Practice quizzes.** Generates practice questions on course topics on request
-- **Grade guardrail.** Politely declines all grade-related questions and redirects to the instructor
+- **Socratic tutoring** — guides students to answers through questioning rather than providing direct answers
+- **Course logistics** — answers questions about due dates, assignments, policies, and the course schedule
+- **Draft feedback** — students can upload a draft and receive guided questions to improve their thinking
+- **Practice quizzes** — generates practice questions on course topics on request
+- **Grade guardrail** — politely declines all grade-related questions and redirects to the instructor
 
 ---
 
@@ -55,57 +55,58 @@ The Cloudflare Worker acts as a middleman so the Anthropic API key is never expo
 
 ---
 
-## Setup & Deployment
-
-### Prerequisites
-- GitHub account with Pages enabled on this repo
-- Cloudflare account with a Worker configured
-- Anthropic API key (from console.anthropic.com)
-
-### Cloudflare Worker Configuration
-The Worker script forwards requests from the app to the Anthropic API. It must:
-1. Accept `POST` requests and handle `OPTIONS` (CORS preflight)
-2. Read the request body and forward it to `https://api.anthropic.com/v1/messages`
-3. Inject the `x-api-key` header using a stored environment variable
-4. Return the Anthropic response with `Access-Control-Allow-Origin: *`
-
-The API key is stored as an environment variable in Cloudflare:
-- **Variable name:** `ANTHROPIC_API_KEY`
-- Set via: Cloudflare Dashboard → Workers & Pages → [worker name] → Settings → Variables
-
-### GitHub Pages
-- Pages is enabled on the `main` branch, root directory
-- The app is served at: `https://dbward.github.io/KUPsych_318/`
-
-### Canvas Embed
-The app can be embedded in a Canvas page using an iframe:
-```html
-<iframe 
-  src="https://dbward.github.io/KUPsych_318/" 
-  width="100%" 
-  height="700px" 
-  frameborder="0">
-</iframe>
-```
-
----
-
 ## Course Content
 
 The chatbot's system prompt includes:
 - Full 8-module course schedule with all due dates (discussion board posts/replies, assignments, quizzes, and unit exams)
 - Course policies (late work, academic integrity, drop/withdraw deadlines, accessibility)
-- Content knowledge across all modules: attention, memory systems, language, problem solving, decision making, and more
+- Detailed content knowledge across all 10 chapters (see below)
 - Behavioral guardrails (no grade discussions, no assignment completion, Socratic-only for content questions)
 
-**Textbook:** Juola & Koshino (2022), *Cognitive Psychology* (4th ed.), BVT Publishing
+**Textbook:** *Cognitive Foundations v1.1* — Aggregated Open Textbook (Pilegard, 2019), free PDF on Canvas
+
+### Content Coverage (Chapters 1–10)
+
+| Chapter | Topic |
+|---|---|
+| 1 | History & Research Methods |
+| 2 | Perception |
+| 3 | Attention |
+| 4 | Short-Term & Working Memory |
+| 5 | Long-Term Memory |
+| 6 | Memory in Context |
+| 7 | Knowledge |
+| 8 | Language |
+| 9 | Problem Solving |
+| 10 | Reasoning & Decision Making |
+
+---
+
+## Changelog
+
+### February 2026 — Textbook Content Overhaul
+
+**Textbook source updated** from Juola & Koshino (2022) to *Cognitive Foundations v1.1* (Pilegard, 2019) to match the actual course reading.
+
+**System prompt significantly expanded.** The previous version contained brief bullet-point summaries. The updated prompt incorporates verbatim excerpts and detailed summaries drawn directly from the textbook, including:
+
+- Specific study procedures, statistics, and findings (e.g., Mueller & Oppenheimer (2014) note-taking study; Roediger & Karpicke (2006) testing effect: 61% vs. 40% recall; Wason selection task: 4% vs. 73% accuracy with abstract vs. social content)
+- Content that was previously missing, including: Wundt's introspection method; the full Baddeley working memory model including the episodic buffer; all four conditional syllogism forms with accuracy rates; cryptomnesia and the sleeper effect; the Braun et al. (2002) Bugs Bunny false memory study; Kanzi and Washoe animal language research; and the permission schema and evolutionary accounts of the Wason selection task
+- Correctly spelled researcher names throughout (Koffka, Shiffrin, Stoffregen, Saffran, Schvaneveldt, Deffenbacher, etc.)
+
+**Textbook text cleanup.** The plain-text source files were converted from RTF using Microsoft Word, which introduced two systematic error types that were corrected programmatically before being used to update the prompt:
+
+1. **Ligature substitutions** — typographic ligatures (ff, fi, fl, ffi, ffl) rendered as `?`, corrupting ~540 words across all three files (e.g., `different` → `di?erent`, `effect` → `e?ect`, `Shiffrin` → `Shi?rin`)
+2. **Encoding errors** — ~440 instances of smart quotes, apostrophes, and dashes rendered as UTF-8 replacement characters (`ï¿½`)
+
+Additional corrections included spaced-out headers from PDF rendering (`C H A P T E R 1`), broken compound words (`hareAlike`, `penStax`, `arperCollins`), and missing characters in researcher names.
 
 ---
 
 ## Development Notes
 
 This app was built using the following workflow:
-- **Claude.ai** — used to build and iterate on the app with AI assistance
+- **Claude.ai** — used to build, iterate on, and update the app with AI assistance
 - **Anthropic Console** (console.anthropic.com) — used to generate the API connector
 - **Cloudflare** (cloudflare.com) — Worker acts as a secure API proxy
 - **GitHub** (github.com) — hosts the app via GitHub Pages
@@ -120,4 +121,4 @@ This is part of a series of course-specific AI study assistants built for KU onl
 
 ---
 
-*Built Spring 2024 | University of Kansas*
+*Built Spring 2024 | Updated February 2026 | University of Kansas*
