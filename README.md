@@ -114,11 +114,6 @@ This app was built using the following workflow:
 The chatbot design is intentionally distinct from other course assistants in the same series (e.g., College Algebra). It uses a purple-to-teal color scheme referencing both mind (purple) and neuroscience (teal), with a Socratic badge in the header to signal its pedagogical approach to students.
 
 ---
-
-## Related Projects
-
-This is part of a series of course-specific AI study assistants built for KU online courses using the same Cloudflare + GitHub Pages architecture.
-
----
+Site link: https://dbward.github.io/KUPsych_318/
 
 *Built February 2026 | University of Kansas*
