@@ -23,8 +23,6 @@ A Socratic tutoring chatbot for PSYC 318 (Cognitive Psychology), built to help s
 | AI | Anthropic Claude API | Powers the chatbot responses |
 | API Proxy | Cloudflare Workers | Keeps the API key secret; handles CORS |
 | Hosting | GitHub Pages | Serves the static HTML file |
-| LMS Embed | Canvas iframe | Embedded in the course as a tool |
-
 ---
 
 ## How It Works
