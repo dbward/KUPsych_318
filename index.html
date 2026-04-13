@@ -816,7 +816,7 @@ async function sendMessage() {
       conversationHistory.pop();
 
       const displayMsg = isTemporary
-        ? errMsg
+        ? "The study assistant is temporarily busy. Please wait a minute and try again."
         : "Something went wrong. Please try again in a moment.";
 
       responseHistory[msgIndex] = { text: displayMsg, isError: true };
