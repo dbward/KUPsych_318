@@ -373,6 +373,9 @@
     .response-header-dot.loading {
       animation: pulse 1.2s ease infinite;
     }
+    .response-header-dot.error {
+      background: var(--amber);
+    }
     .response-header-label {
       font-size: 11px;
       font-weight: 700;
@@ -417,6 +420,24 @@
       border-radius: 4px;
       font-size: 0.9em;
     }
+
+    /* Error notice styling */
+    .error-notice {
+      background: var(--amber-bg);
+      border: 1.5px solid var(--amber-lt);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .error-notice-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .error-notice-text {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    .error-notice-text strong { color: var(--amber); }
 
     .typing-dots {
       display: flex;
@@ -571,10 +592,6 @@
 <script>
 const WORKER_URL = "https://psych-proxy.dbward2119.workers.dev";
 
-// System prompt is server-side in the Cloudflare Worker.
-// The worker also handles chapter-based retrieval — only relevant
-// textbook chapters are included in each request.
-
 let conversationHistory = [];
 let responseHistory = []; // parallel array of responses
 let attachedFile = null;
@@ -690,15 +707,20 @@ function showResponse(index) {
   if (active) active.classList.add("active");
 
   const area = document.getElementById("response-area");
-  if (responseHistory[index]) {
-    area.innerHTML = renderMarkdown(responseHistory[index]);
+  const entry = responseHistory[index];
+  if (entry) {
+    if (entry.isError) {
+      showErrorNotice(entry.text, area);
+    } else {
+      area.innerHTML = renderMarkdown(entry.text);
+    }
   }
 }
 
 function setResponseLoading() {
   const dot = document.getElementById("status-dot");
   const label = document.getElementById("status-label");
-  dot.classList.add("loading");
+  dot.className = "response-header-dot loading";
   label.textContent = "Thinking…";
 
   const area = document.getElementById("response-area");
@@ -708,8 +730,23 @@ function setResponseLoading() {
 function setResponseReady() {
   const dot = document.getElementById("status-dot");
   const label = document.getElementById("status-label");
-  dot.classList.remove("loading");
+  dot.className = "response-header-dot";
   label.textContent = "Response";
+}
+
+function setResponseError() {
+  const dot = document.getElementById("status-dot");
+  const label = document.getElementById("status-label");
+  dot.className = "response-header-dot error";
+  label.textContent = "Temporary issue";
+}
+
+function showErrorNotice(message, area) {
+  area.innerHTML = `
+    <div class="error-notice">
+      <div class="error-notice-icon">⏳</div>
+      <div class="error-notice-text">${message}</div>
+    </div>`;
 }
 
 // ── Progressive text reveal ──
@@ -768,19 +805,50 @@ async function sendMessage() {
 
     const data = await response.json();
 
+    // Check for API errors (overloaded, rate-limited, auth, etc.)
+    if (data.type === "error" || data.error) {
+      const errMsg = data.error?.message || "Something went wrong. Please try again.";
+      const isTemporary = data.error?.type === "overloaded_error" ||
+                          data.error?.type === "rate_limit_error" ||
+                          response.status === 529 || response.status === 429;
+
+      // Don't add error to conversation history — let student retry
+      conversationHistory.pop();
+
+      const displayMsg = isTemporary
+        ? errMsg
+        : "Something went wrong. Please try again in a moment.";
+
+      responseHistory[msgIndex] = { text: displayMsg, isError: true };
+
+      if (isTemporary) {
+        setResponseError();
+      } else {
+        setResponseReady();
+      }
+
+      showErrorNotice(displayMsg, document.getElementById("response-area"));
+      isLoading = false;
+      updateSendBtn();
+      return;
+    }
+
+    // Success — extract the reply
     const reply = data.content?.map(b => b.text || "").join("") ||
-      "I'm sorry, I had trouble generating a response. Please try again.";
+      "I received an empty response. Please try asking again.";
 
     conversationHistory.push({ role: "assistant", content: reply });
-    responseHistory[msgIndex] = reply;
+    responseHistory[msgIndex] = { text: reply, isError: false };
 
     setResponseReady();
     revealText(reply, document.getElementById("response-area"));
   } catch (err) {
-    responseHistory[msgIndex] = "I'm having trouble connecting right now. Please check your connection and try again.";
-    setResponseReady();
-    document.getElementById("response-area").innerHTML =
-      '<p style="color:var(--rose);">Connection error — please try again.</p>';
+    // Network failure (offline, DNS, CORS, etc.)
+    conversationHistory.pop();
+    const errText = "I'm having trouble connecting right now. Please check your connection and try again.";
+    responseHistory[msgIndex] = { text: errText, isError: true };
+    setResponseError();
+    showErrorNotice(errText, document.getElementById("response-area"));
   }
 
   isLoading = false;
