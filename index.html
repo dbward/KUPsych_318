@@ -123,6 +123,32 @@
       max-width: 700px;
     }
 
+    /* ── Footer ── */
+    .app-footer {
+      background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 40%, #0d9488 100%);
+      padding: 7px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .footer-link {
+      font-family: 'Nunito', sans-serif;
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .footer-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
     /* ── Two-column body ── */
     .body-cols {
       display: flex;
@@ -229,17 +255,6 @@
       outline: 2px solid var(--teal-lt);
       outline-offset: 2px;
     }
-    .user-msg .file-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 5px;
-      padding: 2px 7px;
-      font-size: 11px;
-      margin-bottom: 4px;
-      color: rgba(255,255,255,0.9);
-    }
 
     .empty-state {
       flex: 1;
@@ -267,25 +282,12 @@
       background: var(--white);
       border: 2px solid var(--border);
       border-radius: 14px;
-      padding: 7px 9px;
+      padding: 7px 12px;
       transition: border-color 0.2s;
     }
     .input-row:focus-within {
       border-color: var(--purple-lt);
       box-shadow: 0 0 0 3px rgba(124,58,237,0.08);
-    }
-    .attach-btn {
-      background: none; border: none; cursor: pointer;
-      color: var(--purple-lt);
-      padding: 4px;
-      border-radius: 8px;
-      display: flex; align-items: center;
-      transition: color 0.15s, background 0.15s;
-      flex-shrink: 0;
-    }
-    .attach-btn:hover {
-      color: var(--purple);
-      background: var(--purple-bg);
     }
     #chat-input {
       flex: 1;
@@ -323,24 +325,6 @@
       color: #c4b5fd;
       box-shadow: none;
       cursor: not-allowed;
-    }
-    .attach-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--purple-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 7px;
-      padding: 4px 9px;
-      font-size: 11.5px;
-      color: var(--purple);
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .attach-chip button {
-      background: none; border: none; cursor: pointer;
-      color: var(--purple-lt); font-size: 15px; line-height: 1;
-      padding: 0 2px;
     }
     .input-footer {
       text-align: center;
@@ -462,9 +446,95 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.3; }
     }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    /* ── Privacy Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 27, 75, 0.55);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 12px 48px rgba(124,58,237,0.2), 0 2px 8px rgba(0,0,0,0.08);
+      max-width: 520px;
+      width: 100%;
+      overflow: hidden;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 40%, #0d9488 100%);
+      padding: 16px 22px;
+    }
+    .modal-header h2 {
+      font-family: 'Lora', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+    .modal-body {
+      padding: 20px 22px 6px;
+      max-height: 55vh;
+      overflow-y: auto;
+    }
+    .modal-body h3 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-mid);
+      margin: 16px 0 6px;
+    }
+    .modal-body h3:first-child { margin-top: 0; }
+    .modal-body p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .modal-body a {
+      color: var(--purple);
+      text-decoration: none;
+    }
+    .modal-body a:hover { text-decoration: underline; }
+    .modal-footer {
+      padding: 14px 22px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-footer .acknowledge-text {
+      font-size: 11.5px;
+      color: var(--text-soft);
+      text-align: center;
+    }
+    .modal-accept-btn {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.3);
+    }
+    .modal-accept-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(124,58,237,0.35);
     }
 
     /* ── Mobile: stack columns ── */
@@ -483,6 +553,32 @@
   </style>
 </head>
 <body>
+
+<!-- ── Privacy Modal ── -->
+<div class="modal-overlay" id="privacy-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2>About this tool</h2>
+    </div>
+    <div class="modal-body">
+      <p>This is an experimental study assistant built by Doug Ward at the Center for Teaching Excellence. It is not an official KU tool and has not been reviewed by KU IT. Use is optional.</p>
+
+      <h3>What happens to what you type</h3>
+      <p>Your messages are sent to Anthropic (the company that makes Claude) for processing. Anthropic stores inputs and outputs for seven days and does not use them to train AI models. Your messages also pass through a Cloudflare server I maintain; it logs only basic technical information, not message content.</p>
+
+      <h3>What not to share</h3>
+      <p>Please do not enter your name, KUID, grades, draft assignments you plan to submit for a grade, or anything about your academic standing or personal situation. Keep questions focused on course concepts.</p>
+
+      <p>Questions or concerns? Contact me at <a href="mailto:dbward@ku.edu">dbward@ku.edu</a>.</p>
+    </div>
+    <div class="modal-footer">
+      <p class="acknowledge-text">By continuing, you acknowledge you've read this notice.</p>
+      <button class="modal-accept-btn" onclick="acceptPrivacy()">I understand. Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── App ── -->
 <div class="app-shell">
 
   <!-- Header (full width) -->
@@ -540,22 +636,9 @@
         </div>
       </div>
 
-      <!-- File chip -->
-      <div id="attach-preview" class="attach-chip" style="display:none; margin: 0 14px;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-        <span id="attach-name"></span>
-        <button onclick="clearAttach()">×</button>
-      </div>
-
       <!-- Input -->
       <div class="input-bar">
         <div class="input-row">
-          <input type="file" id="file-input" accept=".txt,.pdf,.doc,.docx,.md" style="display:none" onchange="handleFile(event)" />
-          <button class="attach-btn" onclick="document.getElementById('file-input').click()" title="Attach a draft">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-            </svg>
-          </button>
           <textarea id="chat-input" rows="1" placeholder="Ask anything about the course…"
             onkeydown="handleKey(event)"
             oninput="autoResize(this)"></textarea>
@@ -587,37 +670,40 @@
     </div>
 
   </div>
+
+  <!-- Footer -->
+  <div class="app-footer">
+    <button class="footer-link" onclick="showPrivacyModal()">Privacy notice</button>
+  </div>
+
 </div>
 
 <script>
 const WORKER_URL = "https://psych-proxy.dbward2119.workers.dev";
 
 let conversationHistory = [];
-let responseHistory = []; // parallel array of responses
-let attachedFile = null;
-let attachedFileContent = "";
+let responseHistory = [];
 let isLoading = false;
 
-// ── File handling ──
-function handleFile(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  attachedFile = file;
-  const reader = new FileReader();
-  reader.onload = ev => { attachedFileContent = ev.target.result; };
-  reader.readAsText(file);
-  document.getElementById("attach-name").textContent = file.name;
-  document.getElementById("attach-preview").style.display = "inline-flex";
-  updateSendBtn();
+// ── Privacy modal ──
+function acceptPrivacy() {
+  try { localStorage.setItem("psyc318_privacy_accepted", "1"); } catch(e) {}
+  document.getElementById("privacy-modal").classList.add("hidden");
 }
 
-function clearAttach() {
-  attachedFile = null;
-  attachedFileContent = "";
-  document.getElementById("attach-preview").style.display = "none";
-  document.getElementById("file-input").value = "";
-  updateSendBtn();
+function showPrivacyModal() {
+  document.getElementById("privacy-modal").classList.remove("hidden");
 }
+
+(function checkPrivacy() {
+  try {
+    if (localStorage.getItem("psyc318_privacy_accepted") === "1") {
+      document.getElementById("privacy-modal").classList.add("hidden");
+    }
+  } catch(e) {
+    // localStorage unavailable (e.g., iframe sandbox) — show modal every time
+  }
+})();
 
 // ── Input helpers ──
 function autoResize(el) {
@@ -628,7 +714,7 @@ function autoResize(el) {
 
 function updateSendBtn() {
   const val = document.getElementById("chat-input").value.trim();
-  document.getElementById("send-btn").disabled = isLoading || (!val && !attachedFile);
+  document.getElementById("send-btn").disabled = isLoading || !val;
 }
 
 function handleKey(e) {
@@ -652,10 +738,8 @@ function renderMarkdown(text) {
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code>$1</code>');
 
-  // Split into paragraphs
   const blocks = html.split(/\n{2,}/);
   return blocks.map(block => {
-    // Check for list items
     const lines = block.split('\n');
     const isList = lines.every(l => /^\s*[-*]\s/.test(l) || l.trim() === '');
     const isNumList = lines.every(l => /^\s*\d+[.)]\s/.test(l) || l.trim() === '');
@@ -677,20 +761,13 @@ function hideEmpty() {
   if (e) e.style.display = "none";
 }
 
-function addUserMsg(content, fileName, index) {
+function addUserMsg(content, index) {
   hideEmpty();
   const hist = document.getElementById("chat-history");
   const el = document.createElement("div");
   el.className = "user-msg";
   el.dataset.index = index;
   el.onclick = () => showResponse(index);
-
-  if (fileName) {
-    const chip = document.createElement("div");
-    chip.className = "file-chip";
-    chip.textContent = "📎 " + fileName;
-    el.appendChild(chip);
-  }
 
   const span = document.createElement("span");
   span.textContent = content;
@@ -701,7 +778,6 @@ function addUserMsg(content, fileName, index) {
 }
 
 function showResponse(index) {
-  // Highlight active message
   document.querySelectorAll(".user-msg").forEach(m => m.classList.remove("active"));
   const active = document.querySelector(`.user-msg[data-index="${index}"]`);
   if (active) active.classList.add("active");
@@ -762,32 +838,23 @@ function revealText(text, area) {
 async function sendMessage() {
   const inputEl = document.getElementById("chat-input");
   const text = inputEl.value.trim();
-  if ((!text && !attachedFile) || isLoading) return;
+  if (!text || isLoading) return;
 
   isLoading = true;
   updateSendBtn();
 
-  const displayText = text || "(File attached)";
   const msgIndex = responseHistory.length;
 
-  addUserMsg(displayText, attachedFile?.name, msgIndex);
-  // Highlight this as active
+  addUserMsg(text, msgIndex);
   document.querySelectorAll(".user-msg").forEach(m => m.classList.remove("active"));
   const active = document.querySelector(`.user-msg[data-index="${msgIndex}"]`);
   if (active) active.classList.add("active");
 
-  // Build API content
-  let apiContent = text;
-  if (attachedFile && attachedFileContent) {
-    apiContent = (text ? text + "\n\n" : "") + `[Attached file: ${attachedFile.name}]\n\n${attachedFileContent}`;
-  }
-
-  conversationHistory.push({ role: "user", content: apiContent || displayText });
-  responseHistory.push(null); // placeholder
+  conversationHistory.push({ role: "user", content: text });
+  responseHistory.push(null);
 
   inputEl.value = "";
   inputEl.style.height = "auto";
-  clearAttach();
   updateSendBtn();
 
   setResponseLoading();
@@ -805,14 +872,12 @@ async function sendMessage() {
 
     const data = await response.json();
 
-    // Check for API errors (overloaded, rate-limited, auth, etc.)
+    // Check for API errors
     if (data.type === "error" || data.error) {
-      const errMsg = data.error?.message || "Something went wrong. Please try again.";
       const isTemporary = data.error?.type === "overloaded_error" ||
                           data.error?.type === "rate_limit_error" ||
                           response.status === 529 || response.status === 429;
 
-      // Don't add error to conversation history — let student retry
       conversationHistory.pop();
 
       const displayMsg = isTemporary
@@ -833,7 +898,6 @@ async function sendMessage() {
       return;
     }
 
-    // Success — extract the reply
     const reply = data.content?.map(b => b.text || "").join("") ||
       "I received an empty response. Please try asking again.";
 
@@ -843,7 +907,6 @@ async function sendMessage() {
     setResponseReady();
     revealText(reply, document.getElementById("response-area"));
   } catch (err) {
-    // Network failure (offline, DNS, CORS, etc.)
     conversationHistory.pop();
     const errText = "I'm having trouble connecting right now. Please check your connection and try again.";
     responseHistory[msgIndex] = { text: errText, isError: true };
